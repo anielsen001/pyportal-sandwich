@@ -22,20 +22,24 @@ pyportal_screen_offset_x = 10;
 pyportal_component_thick = 8.5 - 5.34;
 
 // location of pyportal bolt holes
-pyportal_thru_offset_y = 56.5/2+(62 - 56.5)/2;
-pyportal_thru_offset_x = 80.5/2+(86-80.5)/2;
+pyportal_thru_offset_y2 = 56.5/2+(62 - 56.5)/2;
+pyportal_thru_offset_x2 = 80.5/2+(86-80.5)/2;
+
+pyportal_thru_offset_y = ( 56.5/2+ 62/2 ) / 2;
+pyportal_thru_offset_x = ( 80.5/2+ 86/2 ) /2;
+
 
 // adafruit 1000C charger board dimensions
 chg_board_thick = 2.0 ; 
 chg_board_width = 22; 
-chg_board_height = 36.5; 
+chg_board_height = 36.1; 
 chg_component_thick = 7.5 - chg_board_thick; 
-chg_board_standoff_height = 1.0; // some minimum to allow for solder flow on bottom 
+chg_board_standoff_height = 2.0; // some minimum to allow for solder flow on bottom 
 chg_board_thru_hole_od = 2.5 ; 
-chg_board_usbside_thru_offset = 15.5/2 + ( 20.5 - 15.5 ) / 2.0;
-chg_board_usbside_edgesep_center = 1.5 + chg_board_thru_hole_od / 2.0;
-chg_board_farside_thru_offset = 11.0/2 + ( 15.4 - 11.0 ) / 2.0;
-chg_board_farside_edgesep_center = 1.0 + chg_board_thru_hole_od / 2.0; 
+chg_board_usbside_thru_offset = ( 15.35/2.0 + 20.25/2.0 )/ 2.0 ; 
+chg_board_usbside_edgesep_center = 1.38 + chg_board_thru_hole_od / 2.0;
+chg_board_farside_thru_offset = ( 10.4/2 + 15.42/2 ) / 2.0;
+chg_board_farside_edgesep_center = 1.02 + chg_board_thru_hole_od / 2.0; 
 
 // front standoff dimensions
 pyportal_standoff_diameter = 5 ; 
@@ -54,7 +58,7 @@ pyportal_rear_standoff_height = batt_thick + pyportal_component_thick;
 m2_thread_diam = 2; // use nominal
 m2_head_diam = 4; // 
 m2_head_height = 1.6; 
-m2_nut_flats = 4; 
+m2_nut_flats = 5; 
 m2_nut_height = 1.6; 
 
 giant_distance = 1000; 
@@ -244,7 +248,7 @@ module back_panel(){
    module chg_bd_peg_mnt(){
         // this is a screw hole type mount
               cylinder( r = chg_board_thru_hole_od/2 - 0.25 , 
-                        h = chg_board_standoff_height*3 );        
+                        h = chg_board_standoff_height*2 );        
     }
     
     module chg_bd_mnt(){
@@ -256,17 +260,20 @@ module back_panel(){
     // add standoffs to hold the charging circuit board
     //
     // after building, translate on to the panel in the correct spot
+    //translate([pyportal_width/2 - (pyportal_width/2-batt_width/2+batt_slot_wall_thick) -batt_circuit_width,
+    //          pyportal_height_max/2 - ( pyportal_height_max/2 - chg_board_width/2),
+    //          pyportal_rear_standoff_height - back_panel_thick/2 - chg_board_standoff_height ]){   
     translate([pyportal_width/2 - (pyportal_width/2-batt_width/2+batt_slot_wall_thick) -batt_circuit_width,
-              pyportal_height_max/2 - ( pyportal_height_max/2 - chg_board_width/2),
+              -chg_board_width/2,
               pyportal_rear_standoff_height - back_panel_thick/2 - chg_board_standoff_height ]){
         $fn=100;
-        translate( [ -chg_board_usbside_thru_offset, chg_board_height/2 -1.5, 0 ] )
+        translate( [ -chg_board_farside_thru_offset, chg_board_height/2 -1.5, 0 ] )
                 chg_bd_mnt();
-        translate( [ chg_board_usbside_thru_offset, chg_board_height/2 -1.5, 0 ] )
+        translate( [ chg_board_farside_thru_offset, chg_board_height/2 -1.5, 0 ] )
                 chg_bd_mnt();
-        translate( [ -chg_board_farside_thru_offset, -chg_board_height/2 -1, 0 ] )
+        translate( [ -chg_board_usbside_thru_offset, -chg_board_height/2 -1, 0 ] )
                 chg_bd_mnt();     
-        translate( [ chg_board_farside_thru_offset, -chg_board_height/2 -1, 0 ] )
+        translate( [ chg_board_usbside_thru_offset, -chg_board_height/2 -1, 0 ] )
                 chg_bd_mnt();
        
 
@@ -277,10 +284,10 @@ module back_panel(){
 //translate( [ -pyportal_width/2.0, -batt_height/2.0,  pyportal_screen_thick + pyportal_component_thick] ) color("green") battery(); 
 
 // place front panel
-translate( [0,0,-pyportal_standoff_height])
-color("red") front_panel();
+//translate( [0,0,-pyportal_standoff_height])
+//color("red") front_panel();
 
 // place rear panel 
-//translate([0,0, pyportal_screen_thick ] ) 
-//back_panel(); 
+translate([0,0, pyportal_screen_thick ] ) 
+back_panel(); 
        
