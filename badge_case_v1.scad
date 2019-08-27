@@ -42,13 +42,11 @@ chg_board_farside_thru_offset = ( 10.4/2 + 15.42/2 ) / 2.0;
 chg_board_farside_edgesep_center = 1.02 + chg_board_thru_hole_od / 2.0; 
 
 // front standoff dimensions
-pyportal_standoff_diameter = 5 ; 
+pyportal_standoff_diameter = 7; 
 pyportal_standoff_thru = 2.5;  // the thru holes are M2.5 size
 pyportal_standoff_height = pyportal_screen_thick;
 
-// rear standoff dimensions
-pyportal_standoff_diameter = 5 ; 
-pyportal_standoff_thru = 2.5;  // the thru holes are M2.5 size
+// rear standoff dimensions ; 
 pyportal_rear_standoff_height = batt_thick + pyportal_component_thick;
 
 // m2 bolt sizes - use for sandwiching assy together
@@ -104,6 +102,12 @@ module front_panel(){
     
     screen_overlap = 1 ; 
     
+    // this difference will clear out space for the pyportal board/screen
+    difference (){
+    
+    // this union adds all the front panel parts that are needed
+    union(){
+
     difference(){
     // create a front panel shape
     translate([ -(pyportal_width + front_panel_edge_pad)/2,
@@ -144,7 +148,8 @@ module front_panel(){
            
              
          } // end difference
-     
+    
+        // add standoffs 
     translate( [ pyportal_thru_offset_x , pyportal_thru_offset_y , front_panel_thick ] ){ 
     portal_panel_standoff();
     }   
@@ -158,8 +163,19 @@ module front_panel(){
     portal_panel_standoff();
     }
     
-
     
+    
+    }// end union
+translate( [-(pyportal_screen_width )/2 + pyportal_screen_offset_x/2,
+                -(pyportal_screen_height )/2,
+                 front_panel_thick ] )
+     cube(  [pyportal_screen_width, pyportal_height_min + 0.5, giant_distance ] );
+    
+} // end difference to clearout for pyportal board
+/*translate( [-(pyportal_screen_width )/2 + pyportal_screen_offset_x/2,
+                -(pyportal_screen_height )/2,
+                 pyportal_screen_thick - pyportal_board_thick] )
+     cube(  [pyportal_screen_width, pyportal_height_min, pyportal_standoff_height*2 ] );*/
      
 } // end module front panel
 
@@ -184,6 +200,8 @@ module back_panel(){
     back_panel_edge_pad = 2; 
 
     difference(){
+        
+    union() {
     // create a back panel shape
     translate([ -(pyportal_width + back_panel_edge_pad)/2,
                -(pyportal_height_max + back_panel_edge_pad)/2,
@@ -194,9 +212,25 @@ module back_panel(){
           pyportal_height_max + back_panel_edge_pad,
           back_panel_thick]);
         
+      // add lanyard attachments
+     lanyard_or = 10;
+     lanyard_ir = 7;
+     $fn=6; 
+     translate( [  (pyportal_width + back_panel_edge_pad)/2-lanyard_or ,
+               (pyportal_height_max + back_panel_edge_pad)/2,
+                batt_thick + pyportal_component_thick ] ) 
+     cylinder_shell( or = lanyard_or, ir = lanyard_ir, h = back_panel_thick ); 
+              
+     translate( [  -(pyportal_width + back_panel_edge_pad)/2 +lanyard_or,
+               (pyportal_height_max + back_panel_edge_pad)/2,
+                batt_thick + pyportal_component_thick ] ) 
+     cylinder_shell( or = lanyard_or, ir = lanyard_ir, h = back_panel_thick );       
+
+     } // end union    
+        
      // remove material to hold m2 hex nuts
-    translate( [ pyportal_thru_offset_x , pyportal_thru_offset_y , back_panel_thick -m2_nut_height+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();  
-    translate( [ -pyportal_thru_offset_x , pyportal_thru_offset_y , back_panel_thick -m2_nut_height+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();  
+    translate( [ pyportal_thru_offset_x , pyportal_thru_offset_y , back_panel_thick -m2_nut_height +.01+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();  
+    translate( [ -pyportal_thru_offset_x , pyportal_thru_offset_y , back_panel_thick -m2_nut_height + 0.01+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();  
     translate( [ pyportal_thru_offset_x , -pyportal_thru_offset_y , back_panel_thick -m2_nut_height+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();           
      translate( [ -pyportal_thru_offset_x , -pyportal_thru_offset_y , back_panel_thick -m2_nut_height+ pyportal_rear_standoff_height ] ) color("green") m2_hex_hole();    
   
@@ -211,7 +245,7 @@ module back_panel(){
     cylinder( $fn=100, r = 2.5/2, h = giant_distance, center = true);      
     } // end difference
     
-    //needs standoffs
+    //needs standoffs for pyportal board
     translate( [ pyportal_thru_offset_x , pyportal_thru_offset_y , 0] ){ 
     portal_back_panel_standoff();
     }   
@@ -267,25 +301,30 @@ module back_panel(){
               -chg_board_width/2,
               pyportal_rear_standoff_height - back_panel_thick/2 - chg_board_standoff_height ]){
         $fn=100;
-        translate( [ -chg_board_farside_thru_offset, chg_board_height/2 -1.5, 0 ] )
+                  
+        translate( [ -chg_board_farside_thru_offset, chg_board_height/2 - 3, 0 ] )
                 chg_bd_mnt();
-        translate( [ chg_board_farside_thru_offset, chg_board_height/2 -1.5, 0 ] )
+        translate( [  chg_board_farside_thru_offset, chg_board_height/2 - 3, 0 ] )
                 chg_bd_mnt();
-        translate( [ -chg_board_usbside_thru_offset, -chg_board_height/2 -1, 0 ] )
+                  
+        translate( [ -chg_board_usbside_thru_offset, -chg_board_height/2 - 1, 0 ] )
                 chg_bd_mnt();     
-        translate( [ chg_board_usbside_thru_offset, -chg_board_height/2 -1, 0 ] )
+        translate( [ chg_board_usbside_thru_offset,  -chg_board_height/2 - 1, 0 ] )
                 chg_bd_mnt();
+   
+              }
+     // end charging board stand offs
        
 
+  
 
-    }
+ 
 }
 // place battery
 //translate( [ -pyportal_width/2.0, -batt_height/2.0,  pyportal_screen_thick + pyportal_component_thick] ) color("green") battery(); 
 
 // place front panel
-//translate( [0,0,-pyportal_standoff_height])
-//color("red") front_panel();
+//translate( [0,0,-pyportal_standoff_height])color("red") front_panel();
 
 // place rear panel 
 translate([0,0, pyportal_screen_thick ] ) 
