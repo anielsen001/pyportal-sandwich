@@ -12,6 +12,8 @@ pyportal_board_thick = 2.0;
 pyportal_component_thick = 8.5 - pyportal_board_thick - pyportal_screen_thick;
 
 // dimensions of screen
+// screen width and height are not the visible portions, they are the entire
+// board.
 pyportal_screen_height = 55; 
 pyportal_screen_width = 80; 
 pyportal_screen_thick = 3.5; 
@@ -54,9 +56,9 @@ pyportal_rear_standoff_height = batt_thick + pyportal_component_thick;
 // http://www.accuratescrew.com/asm-technical-info/metric-sae-information-conversion/
 // https://www.boltdepot.com/fastener-information/nuts-washers/Metric-Nut-Dimensions.aspx
 m2_thread_diam = 2; // use nominal
-m2_head_diam = 4; // 
+m2_head_diam = 5; // 
 m2_head_height = 1.6; 
-m2_nut_flats = 5; 
+m2_nut_flats = 6; 
 m2_nut_height = 1.6; 
 
 giant_distance = 1000; 
@@ -100,7 +102,7 @@ module front_panel(){
     front_panel_thick = 2; 
     front_panel_edge_pad = 2; 
     
-    screen_overlap = 1 ; 
+    screen_overlap = 2 ; 
     
     // this difference will clear out space for the pyportal board/screen
     difference (){
@@ -117,10 +119,10 @@ module front_panel(){
           pyportal_height_max + front_panel_edge_pad,
           front_panel_thick]);
     // remove from front panel an opening for the screen
-    translate( [ -(pyportal_screen_width - screen_overlap)/2 + pyportal_screen_offset_x/2,
+    translate( [ -(pyportal_screen_width - screen_overlap)/2 + pyportal_screen_offset_x/2 ,
                 -(pyportal_screen_height - screen_overlap)/2,
                 - front_panel_thick ] )
-    cube( [ (pyportal_screen_width - screen_overlap), 
+    cube( [ (pyportal_screen_width - screen_overlap) - 6, 
             pyportal_screen_height - screen_overlap,
             front_panel_thick*4  ] );
         
@@ -324,9 +326,11 @@ module back_panel(){
 //translate( [ -pyportal_width/2.0, -batt_height/2.0,  pyportal_screen_thick + pyportal_component_thick] ) color("green") battery(); 
 
 // place front panel
-//translate( [0,0,-pyportal_standoff_height])color("red") front_panel();
+translate( [0,0,-pyportal_standoff_height])color("red") front_panel();
 
+/*
 // place rear panel 
 translate([0,0, pyportal_screen_thick ] ) 
 back_panel(); 
+*/
        
