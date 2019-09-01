@@ -303,12 +303,12 @@ module back_panel(){
               -chg_board_width/2,
               pyportal_rear_standoff_height - back_panel_thick/2 - chg_board_standoff_height ]){
         $fn=100;
-                  
+        /*   // these pegs are not necessary      
         translate( [ -chg_board_farside_thru_offset, chg_board_height/2 - 3, 0 ] )
                 chg_bd_mnt();
         translate( [  chg_board_farside_thru_offset, chg_board_height/2 - 3, 0 ] )
                 chg_bd_mnt();
-                  
+        */         
         translate( [ -chg_board_usbside_thru_offset, -chg_board_height/2 - 1, 0 ] )
                 chg_bd_mnt();     
         translate( [ chg_board_usbside_thru_offset,  -chg_board_height/2 - 1, 0 ] )
@@ -324,13 +324,13 @@ module back_panel(){
 }
 // place battery
 //translate( [ -pyportal_width/2.0, -batt_height/2.0,  pyportal_screen_thick + pyportal_component_thick] ) color("green") battery(); 
-
+/*
 // place front panel
 translate( [0,0,-pyportal_standoff_height])color("red") front_panel();
+*/
 
-/*
 // place rear panel 
 translate([0,0, pyportal_screen_thick ] ) 
 back_panel(); 
-*/
+
        
