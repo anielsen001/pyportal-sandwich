@@ -1,0 +1,3 @@
+This is a sandwich type case for the Adafruit [[https://www.adafruit.com/product/4116][PyPortal]]. In addition to the PyPortal, there is also space for a [[https://www.adafruit.com/product/2465][1000C charging/battery board]] and a [[https://www.adafruit.com/product/328][2500 mAh battery]]. 
+
+The print has been done successfully with PLA using a XYZPrinting Da Vinci 1.0 Pro.
